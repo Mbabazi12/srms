@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  role      String   // 'landlord' | 'tenant'
+  phone     String?
+  createdAt DateTime @default(now())
+}
+
+/// Embedded unit for multi-tenant apartment properties
+type PropertyUnit {
+  unitId   String
+  unitName String
+  tenantId String? @db.ObjectId
+  status   String  @default("vacant") // 'vacant' | 'occupied'
+}
+
+model Property {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String
+  location     String
+  address      String
+  rent         Float
+  bedrooms     Int
+  bathrooms    Int
+  area         Float
+  amenities    String[]
+  status       String         @default("vacant") // 'vacant' | 'occupied' | 'partial'
+  propertyType String         @default("single") // 'single' | 'apartment'
+  units        PropertyUnit[]
+  landlordId   String         @db.ObjectId
+  tenantId     String?        @db.ObjectId        // used for single-type properties
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Payment {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  amount     Float
+  status     String    @default("pending") // 'paid' | 'pending' | 'overdue'
+  date       DateTime?
+  dueDate    DateTime
+  propertyId String    @db.ObjectId
+  tenantId   String    @db.ObjectId
+  landlordId String    @db.ObjectId
+  month      String
+  notes      String?
+  createdAt  DateTime  @default(now())
+}
+
+model MaintenanceRequest {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  issue      String
+  status     String    @default("pending") // 'pending' | 'in_progress' | 'resolved' | 'rejected'
+  priority   String    @default("medium")  // 'low' | 'medium' | 'high' | 'urgent'
+  tenantId   String    @db.ObjectId
+  propertyId String    @db.ObjectId
+  landlordId String    @db.ObjectId
+  notes      String?
+  resolvedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Message {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  senderId    String   @db.ObjectId
+  receiverIds String[] @db.ObjectId
+  messageText String
+  messageType String   @default("normal") // 'urgent' | 'warning' | 'announcement' | 'normal'
+  readByIds   String[] @db.ObjectId
+  createdAt   DateTime @default(now())
+}
