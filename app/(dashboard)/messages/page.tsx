@@ -165,6 +165,13 @@ function TenantMessagesView({
           ) : (
             messages.map(msg => {
               const isMine = msg.senderId === userId;
+              const msgType = (msg.messageType ?? 'normal') as MessageType;
+              const receivedBubbleColor: Record<MessageType, string> = {
+                normal: 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white',
+                urgent: 'bg-red-50 dark:bg-red-900/30 text-slate-900 dark:text-white border border-red-200 dark:border-red-700',
+                warning: 'bg-amber-50 dark:bg-amber-900/30 text-slate-900 dark:text-white border border-amber-200 dark:border-amber-700',
+                announcement: 'bg-blue-50 dark:bg-blue-900/30 text-slate-900 dark:text-white border border-blue-200 dark:border-blue-700',
+              };
               return (
                 <div key={msg.id} className={cn('flex flex-col gap-1', isMine ? 'items-end' : 'items-start')}>
                   <div
@@ -172,11 +179,14 @@ function TenantMessagesView({
                       'max-w-[75%] px-4 py-2.5 rounded-2xl text-sm',
                       isMine
                         ? 'bg-blue-600 text-white rounded-br-sm'
-                        : 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-bl-sm'
+                        : cn(receivedBubbleColor[msgType], 'rounded-bl-sm')
                     )}
                   >
                     {msg.messageText}
                   </div>
+                  {!isMine && msgType !== 'normal' && (
+                    <TypeBadge type={msgType} />
+                  )}
                   <span className="text-xs text-slate-400">{formatTime(msg.createdAt)}</span>
                 </div>
               );

@@ -19,6 +19,7 @@ interface SidebarProps {
   role: UserRole;
   open: boolean;
   onClose: () => void;
+  badges?: Partial<Record<string, number>>;
 }
 
 const landlordNav = [
@@ -39,7 +40,7 @@ const tenantNav = [
   { href: '/profile', label: 'Profile', icon: User },
 ];
 
-export default function Sidebar({ role, open, onClose }: SidebarProps) {
+export default function Sidebar({ role, open, onClose, badges = {} }: SidebarProps) {
   const pathname = usePathname();
   const navItems = role === 'landlord' ? landlordNav : tenantNav;
 
@@ -67,6 +68,7 @@ export default function Sidebar({ role, open, onClose }: SidebarProps) {
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
+          const badge = badges[href];
           return (
             <Link
               key={href}
@@ -80,7 +82,12 @@ export default function Sidebar({ role, open, onClose }: SidebarProps) {
               )}
             >
               <Icon className={cn('h-5 w-5 flex-shrink-0', active ? 'text-blue-600 dark:text-blue-400' : '')} />
-              {label}
+              <span className="flex-1">{label}</span>
+              {badge != null && badge > 0 && (
+                <span className="ml-auto min-w-[1.25rem] h-5 flex items-center justify-center text-xs font-bold rounded-full bg-red-500 text-white px-1 leading-none">
+                  {badge > 99 ? '99+' : badge}
+                </span>
+              )}
             </Link>
           );
         })}
