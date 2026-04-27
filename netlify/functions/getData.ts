@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 
-const uri = process.env.DATABASE_URI;
+const uri = process.env.DATABASE_URL;
 
 exports.handler = async () => {
   const client = new MongoClient(uri);
