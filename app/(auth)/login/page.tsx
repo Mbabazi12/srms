@@ -62,28 +62,6 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome back</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Sign in to your RentSmart account</p>
         </div>
-{/* 
-        Demo accounts
-        <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
-          <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2">Demo Accounts (click to fill)</p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => fillDemo('alice@example.com')}
-              className="text-xs px-3 py-1.5 bg-white dark:bg-slate-700 border border-blue-200 dark:border-slate-600 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition-colors text-left"
-            >
-              <span className="font-medium">🏠 Landlord</span><br />alice@example.com
-            </button>
-            <button
-              type="button"
-              onClick={() => fillDemo('bob@example.com')}
-              className="text-xs px-3 py-1.5 bg-white dark:bg-slate-700 border border-blue-200 dark:border-slate-600 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition-colors text-left"
-            >
-              <span className="font-medium">🧑‍💼 Tenant</span><br />bob@example.com
-            </button>
-          </div>
-          <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">Password: password123</p>
-        </div> */}
 
         {error && <Alert type="error" message={error} className="mb-4" />}
 
